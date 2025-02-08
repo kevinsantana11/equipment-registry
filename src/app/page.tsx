@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import React from "react";
+import { Database } from "@/utils/supabase/supabase";
 
 export default async function Home({ searchParams }: {
   searchParams: Promise<{ [key: string]: string | undefined }>
@@ -16,18 +17,17 @@ export default async function Home({ searchParams }: {
   const register = async (formdata: FormData) => {
     "use server";
 
-    const name = formdata.get("name");
-    const email = formdata.get("email");
+    const name = formdata.get("name")! as string;
+    const email = formdata.get("email")! as string;
     const usaFencingId = Number(formdata.get("usa_fencing_id"));
     const supabase = await createClient(cookies());
 
     const { data, error } = await supabase.from('Members')
         .insert({
-          name: name,
-          email: email,
+          name,
+          email,
           usa_fencing_id: usaFencingId,
-        })
-        .select();
+        }).select();
     console.log(data, error);
 
     let message = "";
