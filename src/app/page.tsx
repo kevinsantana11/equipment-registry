@@ -36,12 +36,13 @@ export default async function Home({ searchParams }: {
     } else if (error != null) {
       message = `Failed, Error: ${error.code}`
     } else {
-      message = `Success, identity (${data[0].usa_fencing_id}) registered.`;
+      redirect(`/members/${data[0].usa_fencing_id}`);
     }
-    redirect(`/?message=${message}`);
   };
 
-  const showRegisterForm = () => {
+  const showRegisterForm = async () => {
+    "use server";
+
     return (
       <form className="flex flex-col gap-4 items-start">
         <div className="flex flex-col">
@@ -56,13 +57,12 @@ export default async function Home({ searchParams }: {
           <label><b>USA Fencing #</b></label>
           <input className="p-2 border-b-2 bg-purple-50 border-black" type="number" placeholder="012345678" name="usa_fencing_id" required />
         </div>
-        <button
-          type="submit"
-          className="rounded-md p-4 bg-purple-600 text-white hover:bg-purple-500 active:bg-purple-400"
-          formAction={register}
-        >
-          Register
-        </button>
+          <button type="submit"
+            className="rounded-md p-4 bg-purple-600 text-white hover:bg-purple-500 active:bg-purple-400"
+            formAction={register}
+          >
+            Register
+          </button>
       </form>
     );
   };
@@ -70,23 +70,16 @@ export default async function Home({ searchParams }: {
   const { message } = await searchParams;
 
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col row-start-2 items-center sm:items-start">
-        <div className="p-16 gap-16 rounded-lg flex bg-purple-50 items-center flex-col">
-          <form action="/?" method="GET">
-            <button type="submit" className="p-16 rounded-lg text-white bg-purple-800 hover:bg-purple-700 active:bg-purple-600 cursor-pointer">
-              <span className="text-4xl"><b>Equipment Registry</b></span>
-            </button>
-          </form>
-          <div className="flex gap-16">
-            <button className="p-4 rounded-md flex flex-col bg-purple-600 text-white hover:bg-purple-500 active:bg-purple-400 items-center w-1/2 h-1/2">
-              <Image src="/qr-code.svg" alt="scan qr code" width={64} height={64} />
-              <span>Scan</span>
-            </button>
-            { message == null ? showRegisterForm() : showMessages(message) }
-          </div>
-        </div>
-      </main>
+    <div className="gap-16 flex">
+      <form action="/scan">
+        <button type="submit" className="p-4 h-28 rounded-md flex-col bg-purple-600 text-white hover:bg-purple-500 active:bg-purple-400 items-center">
+          <Image src="/qr-code.svg" alt="scan qr code" width={64} height={64} />
+          <span>Scan</span>
+        </button>
+      </form>
+      <div className="flex-grow">
+        {message === undefined || message === null ? showRegisterForm() : showMessages(message)}
+      </div>
     </div>
   );
 }
