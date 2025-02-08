@@ -44,7 +44,7 @@ export default async function Home({ searchParams }: {
     "use server";
 
     return (
-      <form className="flex flex-col gap-4 items-start">
+      <form className="flex flex-col gap-4 items-start text-slate-600">
         <div className="flex flex-col">
           <label><b>Name</b></label>
           <input className="p-2 border-b-2 bg-purple-100 border-black" type="text" placeholder="John Doe" name="name" required />

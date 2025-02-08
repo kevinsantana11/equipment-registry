@@ -60,7 +60,7 @@ export default function QRCodeScanner() {
     }, [count]);
 
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col text-slate-600">
             <p>Please click <b>Request Camera Permissions</b> to enable the application to access and enable your devices camera.</p>
             <div className="flex-col self-center">
                 <p>{message}</p>
