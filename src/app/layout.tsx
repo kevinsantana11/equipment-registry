@@ -41,6 +41,9 @@ export default function RootLayout({
               </div>
             </div>
           </div>
+          <div className="mt-64 flex justify-center w-full">
+            <a className="w-fit bg-slate-300 text-slate-500 p-2 rounded-md" href="https://www.flaticon.com/free-icons/fencing" title="fencing icons">Fencing icons created by Freepik - Flaticon</a>
+          </div>
         </body>
     </html>
   );

@@ -47,15 +47,15 @@ export default async function Home({ searchParams }: {
       <form className="flex flex-col gap-4 items-start">
         <div className="flex flex-col">
           <label><b>Name</b></label>
-          <input className="p-2 border-b-2 bg-purple-50 border-black" type="text" placeholder="John Doe" name="name" required />
+          <input className="p-2 border-b-2 bg-purple-100 border-black" type="text" placeholder="John Doe" name="name" required />
         </div>
         <div className="flex flex-col">
           <label><b>Email</b></label>
-          <input className="p-2 border-b-2 bg-purple-50 border-black" type="email" placeholder="john.doe@email.com" name="email" required />
+          <input className="p-2 border-b-2 bg-purple-100 border-black" type="email" placeholder="john.doe@email.com" name="email" required />
         </div>
         <div className="flex flex-col">
           <label><b>USA Fencing #</b></label>
-          <input className="p-2 border-b-2 bg-purple-50 border-black" type="number" placeholder="012345678" name="usa_fencing_id" required />
+          <input className="p-2 border-b-2 bg-purple-100 border-black" type="number" placeholder="012345678" name="usa_fencing_id" required />
         </div>
           <button type="submit"
             className="rounded-md p-4 bg-purple-600 text-white hover:bg-purple-500 active:bg-purple-400"
