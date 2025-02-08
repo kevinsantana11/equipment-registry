@@ -27,13 +27,15 @@ export default function RootLayout({
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
-          <div className="flex justify-center">
-            <div className="p-8 mt-16 rounded-lg bg-purple-50">
-              <form action="/" method="GET">
-                <button type="submit" className="p-8 pt-4 rounded-lg text-white bg-purple-800 hover:bg-purple-700 active:bg-purple-600 cursor-pointer">
-                  <span className="text-4xl"><b>Equipment Registry</b></span>
-                </button>
-              </form>
+          <div className="flex justify-center m-2">
+            <div className="flex-col p-8 mt-16 rounded-lg bg-purple-100 w-fit">
+              <div className="flex justify-center">
+                <form className="w-fit" action="/" method="GET">
+                  <button type="submit" className="p-8 pt-4 rounded-lg text-white bg-purple-800 hover:bg-purple-700 active:bg-purple-600 cursor-pointer">
+                    <span className="text-4xl"><b>Equipment Registry</b></span>
+                  </button>
+                </form>
+              </div>
               <div className="mt-10">
                 {children}
               </div>
