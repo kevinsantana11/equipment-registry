@@ -5,9 +5,9 @@ import { redirect } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 
 export default function QRCodeScanner() {
-    let [message, setMessage] = useState("Nothing detected.");
-    let lastScan = useRef("");
-    let [count, setCount] = useState(0);
+    const [message, setMessage] = useState("Nothing detected.");
+    const lastScan = useRef("");
+    const [count, setCount] = useState(0);
 
     function onScanSuccess(decodedText: string, decodedResult: any) {
         try {
@@ -41,7 +41,7 @@ export default function QRCodeScanner() {
         setCount(0);
     };
     useEffect(() => {
-        var html5QrcodeScanner = new Html5QrcodeScanner(
+        const html5QrcodeScanner = new Html5QrcodeScanner(
             "qr-code-scanner", { fps: 10 }, undefined);
         html5QrcodeScanner.render(onScanSuccess, onScanError);
         return () => {

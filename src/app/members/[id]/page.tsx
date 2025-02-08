@@ -13,13 +13,13 @@ export default async function Page({ params }: {
 }) {
     const { id } = await params;
     const supabase = await createClient(cookies());
-    let getMemberRequest = await supabase
+    const getMemberRequest = await supabase
         .from('Members')
         .select()
         .eq('usa_fencing_id', id)
         .single();
 
-    let member = getMemberRequest.data;
+    const member = getMemberRequest.data;
 
     if (member == null) {
         redirect("/?message=User+could+not+be+found");
