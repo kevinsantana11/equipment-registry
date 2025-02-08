@@ -44,15 +44,18 @@ export default function QRCodeScanner() {
         var html5QrcodeScanner = new Html5QrcodeScanner(
             "qr-code-scanner", { fps: 10 }, undefined);
         html5QrcodeScanner.render(onScanSuccess, onScanError);
+        return () => {
+            html5QrcodeScanner.clear();
+        }
     }, []);
 
     useEffect(() => {
-        if (count == 1) {
-            setMessage(`Detected code`);
-        } else if (count > 1 && count < 3 )
-            setMessage(`Decoded id: ${lastScan.current}, verifying...`);
         if (count >= 3) {
             redirect(`/members/${Number(lastScan.current)}`);
+        } else if (count > 0) {
+            setMessage(`Decoded id: ${lastScan.current}, verifying...`);
+        } else {
+            setMessage(`Nothing Detected.`);
         }
     }, [count]);
 
@@ -62,9 +65,14 @@ export default function QRCodeScanner() {
             <div className="flex-col self-center">
                 <p>{message}</p>
             </div>
-            <div className={[colorMap(count), "border-4"].join(" ")}>
+            <div className={[colorMap(count), "border-8"].join(" ")}>
                 <div id="qr-code-scanner"></div>
             </div>
+            {count > 0 && (
+                <form className="mt-4 p-1 rounded-md text-white bg-purple-500 hover:bg-purple-600 active:bg-purple-700 w-max " action={`/members/${Number(lastScan.current)}`}>
+                    <button type="submit">Use, anyway</button>
+                </form>
+            )}
         </div>
     )
 }
