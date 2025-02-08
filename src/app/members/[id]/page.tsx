@@ -25,7 +25,7 @@ export default async function Page({ params }: {
         redirect("/?message=User+could+not+be+found");
     }
     return (
-        <>
+        <div className="text-gray-600">
             <div className="flex flex-col">
                 <label><b>Name</b></label>
                 <input className="p-2 border-b-2 bg-purple-100 border-gray-400 text-gray-600" type="text" value={member.name} readOnly />
@@ -45,7 +45,7 @@ export default async function Page({ params }: {
             <div className="mt-16 flex justify-center">
                 <QRCode value={String(member.usa_fencing_id)} size={256} />
             </div>
-        </>
+        </div>
 
     );
 }
