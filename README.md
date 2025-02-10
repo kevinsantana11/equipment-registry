@@ -1,4 +1,4 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app). The applications is an equipment registry where users can register, have a QR code generated that can later be attached to a piece of equipment. When scanned this should return the contact information of the registered user in case the piece of equipment is lost. Further iterations on this would be necessary like being able to register the specific equipment but this was mainly a proof of concept/ prototype.
 
 ## Getting Started
 
