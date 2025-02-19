@@ -1,3 +1,4 @@
+import Printer from "@/components/Printer";
 import { createClient } from "@/utils/supabase/server";
 import moment from "moment";
 import { cookies } from "next/headers";
@@ -25,7 +26,7 @@ export default async function Page({ params }: {
         redirect("/?message=User+could+not+be+found");
     }
     return (
-        <div className="text-gray-600">
+        <div className="text-gray-600 flex flex-col gap-4">
             <div className="flex flex-col">
                 <label><b>Name</b></label>
                 <input className="p-2 border-b-2 bg-purple-100 border-gray-400 text-gray-600" type="text" value={member.name} readOnly />
@@ -43,7 +44,10 @@ export default async function Page({ params }: {
                 <input className="p-2 border-b-2 bg-purple-100 border-gray-400 text-gray-600" type="text" value={moment(member.created_at).format("MMMM Do YYYY, h:mm:ss A (ZZ)")} readOnly />
             </div>
             <div className="mt-16 flex justify-center">
-                <QRCode value={String(member.usa_fencing_id)} size={256} />
+                <QRCode id="qr-code" value={String(member.usa_fencing_id)} size={256} />
+            </div>
+            <div className="flex flex-col justify-items-center">
+                <Printer elId="qr-code" width={1200} height={900} />
             </div>
         </div>
 
