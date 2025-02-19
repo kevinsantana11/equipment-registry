@@ -13,7 +13,7 @@ const LoadGsiScript = dynamic(() => import('@/components/LoadGsiScript'), {
                 data-client_id={googleClientId}
                 data-context="signin"
                 data-ux_mode="redirect"
-                data-login_uri="/auth/callback"
+                data-login_uri={`${window.location.origin}/auth/callback`}
                 data-auto_prompt="false">
 
             </div>
