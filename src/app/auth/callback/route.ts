@@ -26,9 +26,9 @@ export async function POST(request: Request) {
         // we can be sure that there is no load balancer in between, so no need to watch for X-Forwarded-Host
         return NextResponse.redirect(`${origin}${next}${searchParams}`, 301)
       } else if (forwardedHost) {
-        return NextResponse.redirect(`https://${forwardedHost}${next}${searchParams}`)
+        return NextResponse.redirect(`https://${forwardedHost}${next}${searchParams}`, 301)
       } else {
-        return NextResponse.redirect(`${origin}${next}${searchParams}`)
+        return NextResponse.redirect(`${origin}${next}${searchParams}`, 301)
       }
     } else {
       console.log("Error getting user!", error);
