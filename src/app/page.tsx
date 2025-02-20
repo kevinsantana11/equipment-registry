@@ -82,8 +82,8 @@ export default async function Home({ searchParams }: {
   const { message, name, email } = await searchParams;
 
   return (
-    <div className="flex divide-solid divide-x-2 divide-slate-300">
-      <div className="flex flex-col gap-8 pr-8">
+    <div className="flex flex-col divide-solid divide-y-2 divide-slate-300">
+      <div className="flex flex-col gap-8 pb-8">
         <span className="text-4xl underline">Search</span>
         <form className="flex flex-col gap-4">
           <label><b>USA Fencing #</b></label>
@@ -102,7 +102,7 @@ export default async function Home({ searchParams }: {
           </button>
         </form>
       </div>
-      <div className="flex-grow pl-8">
+      <div className="flex-grow pt-8">
         {message === undefined || message === null ? showRegisterForm(name, email) : showMessages(message)}
       </div>
     </div>
