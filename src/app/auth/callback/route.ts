@@ -21,7 +21,7 @@ export async function POST(request: Request) {
       const forwardedHost = request.headers.get('x-forwarded-host') // original origin before load balancer
       const isLocalEnv = process.env.NODE_ENV === 'development'
       const fullName = data.user.user_metadata["full_name"] as string;
-      const searchParams = `?name=${fullName.replace(" ", "+")}&email=${data.user.email}`;
+      const searchParams = `?name=${encodeURIComponent(fullName)}&email=${data.user.email}`;
       if (isLocalEnv) {
         // we can be sure that there is no load balancer in between, so no need to watch for X-Forwarded-Host
         return NextResponse.redirect(`${origin}${next}${searchParams}`, 301)
