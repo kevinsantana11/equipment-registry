@@ -1,9 +1,7 @@
-import Printer from "@/components/Printer";
 import { createClient } from "@/utils/supabase/server";
 import moment from "moment";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import QRCode from "react-qr-code";
 
 interface PageParams {
     id: number
@@ -29,25 +27,19 @@ export default async function Page({ params }: {
         <div className="text-gray-600 flex flex-col gap-4">
             <div className="flex flex-col">
                 <label><b>Name</b></label>
-                <input className="p-2 border-b-2 bg-purple-100 border-gray-400 text-gray-600" type="text" value={member.name} readOnly />
+                <input className="p-2 border-b-2 bg-purple-100 border-gray-400" type="text" value={member.name} readOnly />
             </div>
             <div className="flex flex-col">
                 <label><b>Email</b></label>
-                <input className="p-2 border-b-2 bg-purple-100 border-gray-400 text-gray-600" type="email" value={member.email} readOnly />
+                <input className="p-2 border-b-2 bg-purple-100 border-gray-400" type="email" value={member.email} readOnly />
             </div>
             <div className="flex flex-col">
                 <label><b>USA Fencing #</b></label>
-                <input className="p-2 border-b-2 bg-purple-100 border-gray-400 text-gray-600" type="number" value={member.usa_fencing_id} readOnly />
+                <input className="p-2 border-b-2 bg-purple-100 border-gray-400" type="number" value={member.usa_fencing_id || ""} readOnly />
             </div>
             <div className="flex flex-col">
                 <label><b>Registered On</b></label>
-                <input className="p-2 border-b-2 bg-purple-100 border-gray-400 text-gray-600" type="text" value={moment(member.created_at).format("MMMM Do YYYY, h:mm:ss A (ZZ)")} readOnly />
-            </div>
-            <div className="mt-16 flex justify-center">
-                <QRCode id="qr-code" value={String(member.usa_fencing_id)} size={256} />
-            </div>
-            <div className="flex flex-col justify-items-center">
-                <Printer elId="qr-code" width={1200} height={900} />
+                <input className="p-2 border-b-2 bg-purple-100 border-gray-400" type="text" value={moment(member.created_at).format("MMMM Do YYYY, h:mm:ss A (ZZ)")} readOnly />
             </div>
         </div>
 

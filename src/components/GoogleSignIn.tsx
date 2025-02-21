@@ -1,11 +1,19 @@
 "use client"
 import dynamic from 'next/dynamic'
+import { useEffect, useState } from 'react';
 
 export default function GoogleSigIn ({ googleClientId } : { googleClientId: string }) {
  
-const LoadGsiScript = dynamic(() => import('@/components/LoadGsiScript'), {
-  ssr: false,
-})
+    const LoadGsiScript = dynamic(() => import('@/components/LoadGsiScript'), {
+    ssr: false,
+    });
+
+    const [origin, setOrigin] = useState("");
+
+    useEffect(() => {
+        setOrigin(window.location.origin);
+    }, []);
+
     return (
         <>
             <LoadGsiScript/>
@@ -13,7 +21,7 @@ const LoadGsiScript = dynamic(() => import('@/components/LoadGsiScript'), {
                 data-client_id={googleClientId}
                 data-context="signin"
                 data-ux_mode="redirect"
-                data-login_uri={`${window.location.origin}/auth/callback`}
+                data-login_uri={`${origin}/auth/callback`}
                 data-auto_prompt="false">
 
             </div>

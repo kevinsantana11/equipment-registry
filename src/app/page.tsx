@@ -3,8 +3,9 @@ import { cookies } from "next/headers";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import React from "react";
-import { Database } from "@/utils/supabase/supabase";
 import GoogleSigIn from "@/components/GoogleSignIn";
+import QRCode from "react-qr-code";
+import Printer from "@/components/Printer";
 
 export default async function Home({ searchParams }: {
   searchParams: Promise<{ [key: string]: string | undefined }>
@@ -21,21 +22,23 @@ export default async function Home({ searchParams }: {
     redirect(`/members/${usaFencingId}`);
   }
 
-  const register = async (formdata: FormData) => {
+  const update = async (formdata: FormData) => {
     "use server";
 
+    const id = formdata.get("id")! as string;
     const name = formdata.get("name")! as string;
     const email = formdata.get("email")! as string;
     const usaFencingId = Number(formdata.get("usa_fencing_id"));
     const supabase = await createClient(cookies());
 
-    const { data, error } = await supabase.from('Members')
-        .insert({
+    const { error } = await supabase.from('Members')
+        .update({
           name,
           email,
-          usa_fencing_id: usaFencingId,
-        }).select();
-    console.log(data, error);
+          usa_fencing_id: usaFencingId === 0 ? undefined : Number(usaFencingId),
+        })
+        .eq('id', id)
+        .select();
 
     let message = "";
     if (error != null && error.code == "23505") {
@@ -43,35 +46,52 @@ export default async function Home({ searchParams }: {
     } else if (error != null) {
       message = `Failed, Error: ${error.code}`
     } else {
-      redirect(`/members/${data[0].usa_fencing_id}`);
+      redirect('/');
     }
     redirect(`/?message=${message}`)
   };
 
-  const showRegisterForm = async (name: string | undefined, email: string | undefined) => {
+  const ShowProfileInfo = async (userid: string) => {
     "use server";
+    const supabase = await createClient(cookies());
+    const getMemberRequest = await supabase
+        .from('Members')
+        .select()
+        .eq('id', userid)
+        .single();
+
+    const member = getMemberRequest.data;
+
 
     return (
-      <form className="flex flex-col gap-4 items-start w-full">
-        <span className="text-4xl underline text-black">Register</span>
+      <form className="flex flex-col gap-4">
+        <span className="text-4xl underline text-black">Profile</span>
+        <input type="hidden" name="id" value={member?.id} required />
         <div className="flex flex-col w-full">
           <label><b>Name</b></label>
-          <input className="p-2 border-b-2 bg-purple-100 border-black" type="text" placeholder="John Doe" name="name" defaultValue={name} required />
+          <input className="p-2 border-b-2 bg-purple-100 border-black" type="text" placeholder="John Doe" name="name" defaultValue={member?.name} required />
         </div>
         <div className="flex flex-col w-full">
           <label><b>Email</b></label>
-          <input className="p-2 border-b-2 bg-purple-100 border-black" type="email" placeholder="john.doe@email.com" name="email" defaultValue={email} required />
+          <input className="p-2 border-b-2 bg-purple-100 border-black" type="email" placeholder="john.doe@email.com" name="email" defaultValue={member?.email} required />
         </div>
         <div className="flex flex-col w-full">
           <label><b>USA Fencing #</b></label>
-          <input className="p-2 border-b-2 bg-purple-100 border-black" type="number" placeholder="012345678" name="usa_fencing_id" required />
+          <input className="p-2 border-b-2 bg-purple-100 border-black" type="number" placeholder="012345678" name="usa_fencing_id" defaultValue={member?.usa_fencing_id || 0} required />
         </div>
-        <div className="flex gap-2">
+        {
+        member?.usa_fencing_id !== null && 
+        <div className="flex my-10 w-full justify-center">
+          <QRCode id="qr-code" value={String(member?.usa_fencing_id)} size={256} />
+        </div>
+        }
+        <div className="flex gap-2 w-full">
+          <Printer elId="qr-code" width={1200} height={900} />
           <button type="submit"
             className="rounded-md p-4 bg-purple-600 text-white hover:bg-purple-500 active:bg-purple-400"
-            formAction={register}
+            formAction={update}
           >
-            Register
+            Update
           </button>
           <GoogleSigIn googleClientId={process.env.GOOGLE_CLIENT_ID!} />
         </div>
@@ -79,12 +99,24 @@ export default async function Home({ searchParams }: {
     );
   };
 
-  const { message, name, email } = await searchParams;
+  const { message } = await searchParams;
+  let outputMessage = message;
+  const supabase = await createClient(cookies());
+  const { data, error } = await supabase.auth.getUser();
+
+  if (error) {
+    outputMessage = `error, please contact developer with <error_msg: ${error.message}>`;
+    const errorMap: { [key: string]: string} = {
+      'AuthSessionMissingError': 'Please login',
+      'AuthApiError': 'Please login'
+    };
+    outputMessage = errorMap[error.name];
+  }
 
   return (
-    <div className="flex flex-col divide-solid divide-y-2 divide-slate-300">
+    <div className="flex flex-col divide-solid divide-y-2 divide-slate-300 text-slate-800">
       <div className="flex flex-col gap-8 pb-8">
-        <span className="text-4xl underline">Search</span>
+        <span className="text-4xl underline text-black">Search</span>
         <form className="flex flex-col gap-4">
           <label><b>USA Fencing #</b></label>
           <input className="p-2 border-b-2 bg-purple-100 border-black" type="number" placeholder="012345678" name="usa_fencing_id" required />
@@ -102,8 +134,11 @@ export default async function Home({ searchParams }: {
           </button>
         </form>
       </div>
-      <div className="flex-grow pt-8">
-        {message === undefined || message === null ? showRegisterForm(name, email) : showMessages(message)}
+      <div className="flex-grow pt-8 gap-4 flex flex-col">
+        {outputMessage !== undefined && showMessages(outputMessage)}
+        {data.user === null ? (
+          <GoogleSigIn googleClientId={process.env.GOOGLE_CLIENT_ID!} />
+        ) : ShowProfileInfo(data.user.id)}
       </div>
     </div>
   );

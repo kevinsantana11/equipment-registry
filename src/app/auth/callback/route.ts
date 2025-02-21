@@ -13,22 +13,31 @@ export async function POST(request: Request) {
   if (creds) {
 
     const supabase = await createClient(cookies());
-    const {data, error } = (await supabase.auth.signInWithIdToken({
+    const { data, error } = await supabase.auth.signInWithIdToken({
       provider: 'google',
       token: creds.toString()
-    }));
+    });
+
+    if (!error) {
+      data.user.id
+      await supabase.from('Members').insert({
+        id: data.user.id,
+        email: data.user.email || "noemail",
+        name: data.user.user_metadata["full_name"] || "noname",
+        usa_fencing_id: null
+      })
+    }
+
     if (!error) {
       const forwardedHost = request.headers.get('x-forwarded-host') // original origin before load balancer
       const isLocalEnv = process.env.NODE_ENV === 'development'
-      const fullName = data.user.user_metadata["full_name"] as string;
-      const searchParams = `?name=${encodeURIComponent(fullName)}&email=${data.user.email}`;
       if (isLocalEnv) {
         // we can be sure that there is no load balancer in between, so no need to watch for X-Forwarded-Host
-        return NextResponse.redirect(`${origin}${next}${searchParams}`, 301)
+        return NextResponse.redirect(`${origin}${next}`, 301)
       } else if (forwardedHost) {
-        return NextResponse.redirect(`https://${forwardedHost}${next}${searchParams}`, 301)
+        return NextResponse.redirect(`https://${forwardedHost}${next}`, 301)
       } else {
-        return NextResponse.redirect(`${origin}${next}${searchParams}`, 301)
+        return NextResponse.redirect(`${origin}${next}`, 301)
       }
     } else {
       console.log("Error getting user!", error);
