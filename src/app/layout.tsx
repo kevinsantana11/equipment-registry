@@ -28,7 +28,7 @@ export default function RootLayout({
           className={`${geistSans.variable} ${geistMono.variable} antialiased`}
         >
           <div className="flex justify-center m-2">
-            <div className="flex-col p-8 mt-16 rounded-lg bg-purple-100 w-fit">
+            <div className="flex-col p-8 mt-16 rounded-lg bg-purple-100 w-dvw max-w-xl">
               <div className="flex justify-center">
                 <form className="w-fit" action="/" method="GET">
                   <button type="submit" className="p-8 pt-4 rounded-lg text-white bg-purple-800 hover:bg-purple-700 active:bg-purple-600 cursor-pointer">
@@ -36,7 +36,7 @@ export default function RootLayout({
                   </button>
                 </form>
               </div>
-              <div className="mt-10">
+              <div className="mt-10 p-2">
                 {children}
               </div>
             </div>
