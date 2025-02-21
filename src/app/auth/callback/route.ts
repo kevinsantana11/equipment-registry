@@ -19,13 +19,20 @@ export async function POST(request: Request) {
     });
 
     if (!error) {
-      data.user.id
+    const getMemberRequest = await supabase
+        .from('Members')
+        .select()
+        .eq('id', data.user.id)
+        .single();
+    const member = getMemberRequest.data;
+    if (member === null) {
       await supabase.from('Members').insert({
         id: data.user.id,
         email: data.user.email || "noemail",
         name: data.user.user_metadata["full_name"] || "noname",
         usa_fencing_id: null
-      })
+      });
+    }
     }
 
     if (!error) {
