@@ -85,7 +85,7 @@ export default async function Home({ searchParams }: {
           <QRCode id="qr-code" value={String(member?.usa_fencing_id)} size={256} />
         </div>
         }
-        <div className="flex gap-2 w-full">
+        <div className="flex gap-2 w-full flex-wrap">
           <Printer elId="qr-code" width={1200} height={900} msg="Nothing to print, please provide a non zero value for your USA fencing ID" />
           <button type="submit"
             className="rounded-md p-4 bg-purple-600 text-white hover:bg-purple-500 active:bg-purple-400"
