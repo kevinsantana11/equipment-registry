@@ -2,6 +2,8 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+* Setup a node environment using [these generated instructions](https://nodejs.org/en/download) `I recommend using Node.js @ v22 LTS + <your_platform :- linux/macos/windows> + nvm + npm`
+
 First, run the development server:
 
 ```bash
