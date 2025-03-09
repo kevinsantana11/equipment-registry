@@ -3,18 +3,8 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 ## Getting Started
 
 * Setup a node environment using [these generated instructions](https://nodejs.org/en/download) `I recommend using Node.js @ v22 LTS + <your_platform :- linux/macos/windows> + nvm + npm`
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+* Install dependencies: `npm install`
+* Run the dev server: `npm run dev`
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
